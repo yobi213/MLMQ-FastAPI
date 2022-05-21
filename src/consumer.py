@@ -1,3 +1,12 @@
+import pika
+import json
+from publisher import Publisher
+from modelAPI import ModelAPI
+import config as cfg
+
+
+modelAPI = ModelAPI()
+
 class Consumer:
     def __init__(self):
         self.__url = cfg.url
@@ -12,15 +21,13 @@ class Consumer:
         return
 
     def model_inference(channel, method_frame, header_frame, body):
-        print('body:',body)
         message = json.loads(body)
         print('message:',message)
         print('model input :',message['text'])
-        pred = get_model_pred(message['text'])
+        pred = modelAPI.get_model_pred(message['text'])
         message['pred'] = pred
-        print(message)
-        print(type(message))
         message = json.dumps(message)
+        print(message)
         publisher = Publisher()
         publisher.main(message)
         return
@@ -31,7 +38,7 @@ class Consumer:
         chan.basic_consume(
             queue = self.__queue,
             on_message_callback = Consumer.model_inference,
-            auto_ack = False
+            auto_ack = True
         )
         print('Consumer is starting...')
         chan.start_consuming()
