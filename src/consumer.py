@@ -20,19 +20,25 @@ class Consumer:
         print('Received %s' % body)
         return
 
+
     def model_inference(channel, method_frame, header_frame, body):
         message = json.loads(body)
-        print('message:',message)
+        sentence = message['text']
+        print('input message:', message)
+        if len(sentence) < 5 or message['ch'] == "tmr":
+            print("filtering")
+            return
         print('model input :',message['text'])
         pred = modelAPI.get_model_pred(message['text'])
         message['pred'] = pred
         message = json.dumps(message)
-        print(message)
-        publisher = Publisher()
+        print('output message:', message)
         publisher.main(message)
         return
 
     def main(self):
+        global publisher
+        publisher = Publisher()
         conn = pika.BlockingConnection(pika.ConnectionParameters(self.__url, self.__port, self.__vhost, self.__cred))
         chan = conn.channel()
         chan.basic_consume(

@@ -13,6 +13,7 @@ class Publisher:
     def main(self,message):
         conn = pika.BlockingConnection(pika.ConnectionParameters(self.__url, self.__port, self.__vhost, self.__cred))
         chan = conn.channel()
+        print(f'publishing to {self.__queue}:', message)
         chan.basic_publish(
             exchange = '',
             routing_key = self.__queue,
@@ -35,6 +36,7 @@ class Sample:
     def main(self,message):
         conn = pika.BlockingConnection(pika.ConnectionParameters(self.__url, self.__port, self.__vhost, self.__cred))
         chan = conn.channel()
+        print(f'publishing to {self.__queue}:',message)
         chan.basic_publish(
             exchange = '',
             routing_key = self.__queue,
