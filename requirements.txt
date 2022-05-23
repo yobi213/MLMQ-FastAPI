@@ -1,6 +1,5 @@
-#python-mecab-ko
-pororo
 fastapi
 uvicorn
 pydantic
 pika
+requests

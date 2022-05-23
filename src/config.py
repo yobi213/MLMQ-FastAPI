@@ -1,4 +1,4 @@
-url = 'localhost'
+url = 'host.docker.internal'
 port = 5672
 
 cred_id = 'guest'
@@ -10,4 +10,4 @@ source_queue = 'stt_queue'
 dest_vhost = 'output'
 dest_queue = 'output_queue'
 
-model_url = 'http://localhost:8000/text_classification/sentiment/'
+model_url = 'http://host.docker.internal:8000/text_classification/sentiment/'
